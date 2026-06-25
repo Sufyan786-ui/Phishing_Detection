@@ -1,0 +1,402 @@
+/* scanner.css - PhishShield Assessment Form & Loader Components */
+
+/* Scanner Grid and Two Column Layout */
+.scanner-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .scanner-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.scanner-main-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.scanner-side-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Scan Submission Form */
+.scan-form {
+    display: flex;
+    gap: 1rem;
+}
+
+.input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--text-tertiary);
+    pointer-events: none;
+}
+
+.scan-form input {
+    width: 100%;
+    padding: 1.1rem 1.25rem 1.1rem 3.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: #ffffff;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.scan-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--bg-secondary);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 2.2rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--primary-glow);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Grouped Quick Tests Catalog Styling */
+.quick-tests-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.quick-tests-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.quick-tests-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.qt-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.qt-group-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.qt-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.btn-test {
+    background-color: #e3f3e7;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-test:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--bg-accent-active);
+}
+
+/* Safe Group buttons */
+.qt-group:has(.text-safe) .btn-test {
+    background-color: var(--color-safe-bg);
+    border-color: var(--color-safe-border);
+    color: var(--text-primary);
+}
+
+.qt-group:has(.text-safe) .btn-test::before {
+    content: "✓";
+    color: var(--color-safe);
+    font-weight: bold;
+    margin-right: 0.35rem;
+}
+
+/* Simulated Phishing Group buttons */
+.qt-group:has(.text-risk) .btn-test {
+    background-color: #d9f1df;
+    border-color: #b7dfc2;
+    color: var(--text-primary);
+}
+
+.qt-group:has(.text-risk) .btn-test::before {
+    content: "📄";
+    margin-right: 0.35rem;
+    font-size: 0.8em;
+}
+
+/* Suspicious Group buttons */
+.qt-group:has(.text-suspicious) .btn-test {
+    background-color: var(--color-risk-bg);
+    border-color: var(--color-risk-border);
+    color: var(--color-risk);
+}
+
+.qt-group:has(.text-suspicious) .btn-test::before {
+    content: "⚠";
+    margin-right: 0.35rem;
+}
+
+/* Dynamic Scanner Loader */
+.scanner-loader {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.loader-spinner-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.spinner-core {
+    width: 100%;
+    height: 100%;
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.spinner-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--primary);
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes heartbeat {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+}
+
+.loader-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    width: 100%;
+}
+
+.step-item {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.step-item.active {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--bg-accent);
+}
+
+.step-item.active .step-icon {
+    animation: spin 2s linear infinite;
+    color: var(--primary);
+}
+
+.step-item.success {
+    border-color: var(--color-safe-border);
+    color: var(--color-safe);
+    background-color: var(--color-safe-bg);
+}
+
+.step-item.success .step-icon {
+    color: var(--color-safe);
+}
+
+.step-item.skipped {
+    border-color: var(--border-color);
+    color: var(--text-tertiary);
+    background-color: var(--bg-tertiary);
+    opacity: 0.55;
+    border-style: dashed;
+}
+
+.step-item.skipped .step-icon {
+    color: var(--text-tertiary);
+}
+
+.step-item.critical {
+    border-color: var(--color-risk-border);
+    color: var(--color-risk);
+    background-color: var(--color-risk-bg);
+}
+
+.step-item.critical .step-icon {
+    color: var(--color-risk);
+}
+
+/* Info Panel Card (Defense Engine description) */
+.info-panel-card {
+    background-color: #245f43;
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    color: white;
+    transition: var(--transition);
+}
+
+.info-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.info-panel-header i {
+    color: var(--accent);
+    width: 18px;
+    height: 18px;
+}
+
+.info-panel-header i {
+    color: white;
+}
+
+.info-panel-header h3 {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: white;
+}
+
+.info-panel-text {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+}
+
+/* Recent Scans (3 items) card */
+.recent-scans-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--card-shadow);
+}
+
+.recent-scans-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.recent-scans-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.recent-badge-count {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.recent-scans-list-wrapper {
+    overflow-y: auto;
+    max-height: 250px;
+}
+
+.recent-scans-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@media (max-width: 760px) {
+    .scan-form {
+        flex-direction: column;
+    }
+    .btn-primary {
+        justify-content: center;
+        min-height: 48px;
+    }
+}

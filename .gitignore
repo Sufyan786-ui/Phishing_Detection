@@ -1,0 +1,70 @@
+# Environment variables (contains API keys and secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Databases (SQLite, MySQL locks/dumps, etc.)
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Large Datasets
+*.csv
+backend/PhiUSIIL_Phishing_URL_Dataset.csv
+
+# Python caching and compilation
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+pip-selfcheck.json
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Agent/Developer tools temporary directories
+.agents/

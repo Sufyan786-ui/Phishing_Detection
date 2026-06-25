@@ -1,0 +1,190 @@
+/* history.css - PhishShield Full History Logs & Prevention Center Guides */
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.resource-card {
+    background-color: #f6fff7;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+.resource-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.header-title i {
+    color: var(--primary);
+}
+
+.header-title h3 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.btn-icon-small {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.btn-icon-small:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.history-list-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 450px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-tertiary);
+    padding: 2rem 0;
+    gap: 0.5rem;
+}
+
+.empty-state i {
+    width: 36px;
+    height: 36px;
+}
+
+.empty-state p {
+    font-size: 0.85rem;
+}
+
+.history-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.history-item {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.history-item:hover {
+    border-color: var(--primary);
+    background-color: var(--bg-accent);
+}
+
+.history-meta h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    word-break: break-all;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-meta span {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+}
+
+.history-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-safe { background-color: var(--color-safe-bg); color: var(--color-safe); }
+.badge-suspicious-low { background-color: #fef9c3; color: #eab308; }
+.badge-suspicious-high { background-color: #fff7ed; color: #ea580c; }
+.badge-suspicious { background-color: var(--color-suspicious-bg); color: var(--color-suspicious); }
+.badge-risk { background-color: var(--color-risk-bg); color: var(--color-risk); }
+
+/* Education Guidance Styling */
+.education-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.edu-item {
+    display: flex;
+    gap: 1rem;
+}
+
+.edu-num {
+    width: 28px;
+    height: 28px;
+    background-color: var(--bg-accent);
+    border: 1px solid var(--primary-glow);
+    border-radius: 50%;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.edu-text h4 {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+    color: var(--text-primary);
+}
+
+.edu-text p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+}

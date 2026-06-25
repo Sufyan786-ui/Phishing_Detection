@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishShield | Zero-Day Phishing Analyzer</title>
+    <meta name="description" content="Intelligent multi-layered phishing detection system assessing URL, reputation, content, and visual brand identity.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modular Stylesheets -->
+    <link rel="stylesheet" href="css/global.css?v=20260624-2">
+    <link rel="stylesheet" href="css/status.css?v=20260624-2">
+    <link rel="stylesheet" href="css/scanner.css?v=20260624-2">
+    <link rel="stylesheet" href="css/analysis.css?v=20260625-3">
+    <link rel="stylesheet" href="css/history.css?v=20260625-3">
+</head>
+<body>
+    <!-- Background grid decoration -->
+    <div class="bg-decorations">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <header class="app-header no-print">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="shield-alert"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>PHISH<span>SHIELD</span></h1>
+                    <p>Zero-Day Phishing Analyzer</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <nav class="view-nav" aria-label="Primary">
+                     <button type="button" id="scannerNavBtn" class="view-nav-btn active">Scanner</button>
+                     <button type="button" id="analysisNavBtn" class="view-nav-btn" disabled>Analysis</button>
+                     <button type="button" id="historyNavBtn" class="view-nav-btn">History Logs</button>
+                </nav>
+                <div class="db-badge">
+                    <span class="pulse-indicator"></span>
+                    <span id="dbTypeLabel">MySQL Active</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-layout">
+        <div id="scannerView" class="app-view">
+        <div class="scanner-grid">
+            <!-- Left Column: Scan Area -->
+            <div class="scanner-main-col">
+                <section class="scan-section no-print">
+                    <div class="section-card">
+                        <div class="card-header">
+                            <h2>URL Safety Assessment</h2>
+                            <p>Input a domain or full URL to run our multi-layered 4-stage analysis engine.</p>
+                        </div>
+                        <form id="scanForm" class="scan-form">
+                            <div class="input-wrapper">
+                                <i data-lucide="link" class="input-icon"></i>
+                                <input type="text" id="urlInput" placeholder="Enter URL to scan (e.g. login-verify-paypal.com or google.com)" required autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                <span>Scan URL</span>
+                                <i data-lucide="shield-check"></i>
+                            </button>
+                        </form>
+                        
+                        <!-- Grouped Quick Tests -->
+                        <div class="quick-tests-container">
+                            <span class="quick-tests-title"><i data-lucide="zap"></i> Quick Test Catalog</span>
+                            
+                            <div class="quick-tests-groups">
+                                <div class="qt-group">
+                                    <span class="qt-group-label text-safe">Safe</span>
+                                    <div class="qt-buttons">
+                                        <button type="button" class="btn-test" data-url="google.com">Google</button>
+                                        <button type="button" class="btn-test" data-url="github.com">GitHub</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="qt-group">
+                                    <span class="qt-group-label text-risk">Simulated Phishing</span>
+                                    <div class="qt-buttons">
+                                        <button type="button" class="btn-test" data-url="login-verify-paypal.com">PayPal Fake</button>
+                                        <button type="button" class="btn-test" data-url="netflix-login-update.com">Netflix Fake</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="qt-group">
+                                    <span class="qt-group-label text-suspicious">Suspicious</span>
+                                    <div class="qt-buttons">
+                                        <button type="button" class="btn-test" data-url="http://login-verify-paypal.com">HTTP login form</button>
+                                        <button type="button" class="btn-test" data-url="verify-apple-secure.com">Brand mismatch</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Steps Loader -->
+                        <div id="scannerLoader" class="scanner-loader hidden">
+                            <div class="loader-spinner-container">
+                                <div class="spinner-core"></div>
+                                <i data-lucide="cpu" class="spinner-icon"></i>
+                            </div>
+                            <div class="loader-steps">
+                                <div class="step-item" id="step-lexical">
+                                    <i data-lucide="clock" class="step-icon"></i>
+                                    <span>Analyzing URL lexical patterns...</span>
+                                </div>
+                                <div class="step-item" id="step-threat">
+                                    <i data-lucide="clock" class="step-icon"></i>
+                                    <span>Querying GSB & PhishTank feeds...</span>
+                                </div>
+                                <div class="step-item" id="step-content">
+                                    <i data-lucide="clock" class="step-icon"></i>
+                                    <span>Inspecting HTML document structure...</span>
+                                </div>
+                                <div class="step-item" id="step-similarity">
+                                    <i data-lucide="clock" class="step-icon"></i>
+                                    <span>Performing brand similarity comparison...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent 3 Scans Section -->
+                <section class="recent-scans-section no-print">
+                    <div class="recent-scans-card">
+                        <div class="recent-scans-header">
+                            <div class="header-title">
+                                <i data-lucide="history"></i>
+                                <h3>Recent Activity</h3>
+                            </div>
+                            <span class="recent-badge-count">Last 3 scans</span>
+                        </div>
+                        <div class="recent-scans-list-wrapper">
+                            <div id="recentPlaceholder" class="empty-state">
+                                <i data-lucide="folder-open"></i>
+                                <p>No recent scans found.</p>
+                            </div>
+                            <ul id="recentScansList" class="recent-scans-list">
+                                <!-- Seeded by JS (max 3) -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Sidebar Info & Status -->
+            <div class="scanner-side-col no-print">
+                <!-- API Engine Status Card -->
+                <div class="status-panel-card">
+                    <div class="status-panel-header">
+                        <i data-lucide="activity"></i>
+                        <h3>Engine Connection Status</h3>
+                    </div>
+                    <div class="status-indicators">
+                        <div class="status-row">
+                            <span class="status-label">Google Safe Browsing</span>
+                            <span id="statusGSB" class="status-indicator-badge warning">Checking...</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">PhishTank Feed</span>
+                            <span id="statusPhishTank" class="status-indicator-badge warning">Checking...</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">Local Database</span>
+                            <span id="statusDB" class="status-indicator-badge warning">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PhishShield Security Info -->
+                <div class="info-panel-card">
+                    <div class="info-panel-header">
+                        <i data-lucide="shield-check"></i>
+                        <h3>Defense Engine</h3>
+                    </div>
+                    <p class="info-panel-text">
+                        Our multi-layered engine checks domains for lexical warning signs, inspects active SSL certificates, analyses forms for credential harvesting, and cross-references visual identities.
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Main Results & Analytics Section -->
+        <section id="analysisView" class="app-view results-section hidden">
+            <!-- Dynamic Result Card -->
+            <div class="result-summary-card">
+                <div class="card-grid">
+                    <!-- Gauge Meter -->
+                    <div class="gauge-container">
+                        <div class="gauge-glow"></div>
+                        <svg class="gauge-svg" viewBox="0 0 120 120">
+                            <!-- Background track -->
+                            <path class="gauge-track" d="M20 90 A 45 45 0 1 1 100 90" fill="none" stroke-width="8" stroke-linecap="round"/>
+                            <!-- Indicator fill -->
+                            <path id="gaugeIndicator" class="gauge-fill fill-safe" d="M20 90 A 45 45 0 1 1 100 90" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220"/>
+                        </svg>
+                        <div class="gauge-content">
+                            <span id="resultScore" class="gauge-score">0</span>
+                            <span class="gauge-max">/100</span>
+                            <span id="resultVerdict" class="gauge-verdict text-safe">SAFE</span>
+                        </div>
+                    </div>
+
+                    <!-- Meta & URL Info -->
+                    <div class="meta-container">
+                        <div class="result-badge-row">
+                            <span class="report-badge">Analysis Report</span>
+                            <span id="detectionModeBadge" class="mode-badge zero-day">Zero-Day Analysis</span>
+                            <span id="scanTimestamp" class="timestamp-badge">Today at 10:12 PM</span>
+                        </div>
+                        <h3 id="resultUrl" class="result-url-text">https://www.google.com</h3>
+                        
+                        <div class="action-buttons-row no-print">
+                            <button id="newScanBtn" class="btn-secondary">
+                                <i data-lucide="search"></i>
+                                <span>New Scan</span>
+                            </button>
+                            <button id="printReportBtn" class="btn-secondary">
+                                <i data-lucide="printer"></i>
+                                <span>Save PDF / Print</span>
+                            </button>
+                            <button id="closeReportBtn" class="btn-text-only">
+                                <span>Dismiss Report</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why this verdict? summary -->
+                <div id="verdictSummaryBlock" class="verdict-summary-box">
+                    <div class="vs-icon">
+                        <i data-lucide="help-circle"></i>
+                    </div>
+                    <div class="vs-text">
+                        <h4>Why this verdict?</h4>
+                        <p id="verdictSummaryText">Generating dynamic analysis report explanation...</p>
+                    </div>
+                </div>
+
+                <!-- Recommendations Callout -->
+                <div id="recommendationBlock" class="recommendation-box box-safe">
+                    <div class="rec-icon">
+                        <i data-lucide="shield-alert" id="recIconElement"></i>
+                    </div>
+                    <div class="rec-text">
+                        <h4 id="recTitle">Safety Verdict & Analysis Summary</h4>
+                        <div id="recBody" class="markdown-body">
+                            Loading recommendations...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Breakdown -->
+            <div class="analysis-breakdown-card">
+                <div class="analysis-breakdown-header">
+                    <div>
+                        <span class="report-badge">Decision Breakdown</span>
+                        <h3>What caused this verdict?</h3>
+                    </div>
+                    <p id="analysisModeLabel">Waiting for scan result...</p>
+                </div>
+                
+                <!-- Component Risk Contribution Bars -->
+                <div class="contribution-chart-container">
+                    <h4>Component Risk Contribution</h4>
+                    <div id="contributionBars" class="contribution-bars-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <div id="riskBreakdownList" class="risk-breakdown-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Detailed Module Verdicts Grid -->
+            <div class="details-grid">
+                <!-- URL Features Card -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <i data-lucide="link-2" class="detail-header-icon"></i>
+                        <h3>URL Lexical Features</h3>
+                    </div>
+                    <div class="detail-card-body">
+                        <div id="urlFeatureList" class="feature-checklist">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threat Intel Card -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <i data-lucide="database" class="detail-header-icon"></i>
+                        <h3>Threat Intelligence Lookups</h3>
+                    </div>
+                    <div class="detail-card-body">
+                        <div id="threatIntelList" class="feature-checklist">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Analysis Card -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <i data-lucide="code" class="detail-header-icon"></i>
+                        <h3>HTML Content Analysis</h3>
+                    </div>
+                    <div class="detail-card-body">
+                        <div id="contentAnalysisList" class="feature-checklist">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brand Similarity Card -->
+                <div class="detail-card">
+                    <div class="detail-card-header">
+                        <i data-lucide="copy" class="detail-header-icon"></i>
+                        <h3>Brand Impersonation Check</h3>
+                    </div>
+                    <div class="detail-card-body">
+                        <div id="similarityAnalysisList" class="feature-checklist">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="historyView" class="app-view hidden">
+        <!-- Threat Intelligence Dashboard (Complete logs & Education) -->
+        <section class="dashboard-resources no-print">
+            <div class="resources-grid">
+                <!-- Left: Complete Scan Logs -->
+                <div class="resource-card history-card">
+                    <div class="resource-header">
+                        <div class="header-title">
+                            <i data-lucide="history"></i>
+                            <h3>Complete Scan History Logs</h3>
+                        </div>
+                        <button id="refreshHistoryBtn" class="btn-icon-small" title="Refresh Log">
+                            <i data-lucide="rotate-cw"></i>
+                        </button>
+                    </div>
+                    <div class="history-list-wrapper">
+                        <div id="historyPlaceholder" class="empty-state hidden">
+                            <i data-lucide="folder-open"></i>
+                            <p>No historical scans found. Scan a URL to start logging.</p>
+                        </div>
+                        <ul id="historyList" class="history-list">
+                            <!-- Seeded by API -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right: Educational Guide -->
+                <div class="resource-card education-card">
+                    <div class="resource-header">
+                        <div class="header-title">
+                            <i data-lucide="graduation-cap"></i>
+                            <h3>Phishing Prevention Center</h3>
+                        </div>
+                    </div>
+                    <div class="education-content">
+                        <div class="edu-item">
+                            <div class="edu-num">1</div>
+                            <div class="edu-text">
+                                <h4>Inspect the Address Bar First</h4>
+                                <p>Attackers use visual similarity (lookalike domains) such as <code>paypa1.com</code> or <code>paypal-security.com</code>. Check the exact domain before writing anything.</p>
+                            </div>
+                        </div>
+                        <div class="edu-item">
+                            <div class="edu-num">2</div>
+                            <div class="edu-text">
+                                <h4>Look for Unencrypted Sites (HTTP)</h4>
+                                <p>Legitimate login portals are almost exclusively secured via HTTPS. If the connection says "Not Secure", do not submit sensitive credentials.</p>
+                            </div>
+                        </div>
+                        <div class="edu-item">
+                            <div class="edu-num">3</div>
+                            <div class="edu-text">
+                                <h4>Credential Harvesting Forms</h4>
+                                <p>Phishing templates are designed to submit your forms directly back to the attacker's server, which may be located under completely different domains.</p>
+                            </div>
+                        </div>
+                        <div class="edu-item">
+                            <div class="edu-num">4</div>
+                            <div class="edu-text">
+                                <h4>Verify Through Official Channels</h4>
+                                <p>If a bank or provider alerts you about "suspended access" with a button to click, close the link and navigate to your official banking app directly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+    </main>
+
+    <footer class="app-footer no-print">
+        <div class="footer-container">
+            <p>&copy; 2026 PhishShield Laboratories. Developed for advanced threat mitigation.</p>
+            <div class="footer-links">
+                <a href="#scanForm" id="footerNewScanLink">New Scan</a>
+                <span>&middot;</span>
+                <span id="apiStatusBadge" class="status-badge-green"><span class="bullet"></span>Services Online</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modular App Script Coordinator -->
+    <script type="module" src="js/app.js?v=20260625-3"></script>
+</body>
+</html>
