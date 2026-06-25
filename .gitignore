@@ -68,3 +68,9 @@ Thumbs.db
 
 # Agent/Developer tools temporary directories
 .agents/
+
+# User reports and local project requirements
+project_report.md
+project_report.docx
+generate_docx.py
+requirements.txt
